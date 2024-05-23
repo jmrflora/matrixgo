@@ -34,12 +34,32 @@ func (l *LinhaVetor) Set(i int, e Elemento) {
 	(*l)[i] = e
 }
 
+func (l *LinhaVetor) Get(i int) Elemento {
+	if i < 0 || i >= len(*l) {
+		panic("po mo preguiça")
+	}
+
+	return (*l)[i]
+}
+
 func (l *LinhaVetor) MultiplicacaoEscalar(k float64) *LinhaVetor {
 	nl := NewLinhaVetor(len(*l))
 	for i, e := range *l {
 		nl.Set(i, e.MultiEscalar(k))
 	}
 	return nl
+}
+
+func (l *LinhaVetor) AdicaoDeLinhas(ol *LinhaVetor) (*LinhaVetor, error) {
+	if len(*l) != len(*ol) {
+		return nil, errors.New("tamanho incompativel")
+	}
+	nl := NewLinhaVetor(len(*l))
+	for i := range *l {
+		el := ol.Get(i)
+		nl.Set(i, l.Get(i).Soma(el))
+	}
+	return nl, nil
 }
 
 func NewMatrix(linhas, colunas int) *Matrix {
